@@ -1,0 +1,202 @@
+<!--
+
+       ============= ASSUMPTIONS ============
+
+(a) score/wins/losses is oriented to the user
+(b) points are integers
+(c) value of crystal remains visible after click event
+(d) repeating random generated numbers for crystals is permitted
+(e) crystals can be a click event unlimited number of times
+(f) random number value resets after each win/loss
+(g) 
+
+       =============== TASKS ================
+(1)  generate random number between 19-120 per game iteration
+(2)  create click events
+(3)  total score that increments
+(4)  store images
+(5)  table organization
+(6)  compare total score to random number
+(7)  conditional for total score verse random number generated
+(8)  generate random values for icons between 1-12 per game iteration
+(9)  increment wins / losses
+(10) table structure 
+(11) 
+
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CrystalCollector!</title>
+</head>
+
+<body background="asanaoBackground.png">
+
+	<table border="1" align="center" style = " border-color:tan; border-collapse:collapse; width:1000px; padding:0px; border-radius:25px 25px;">
+		<tr style="line-height:10%; background-color:brown; height:80px; text-align:center; margin:0px; padding:0px; color:white;">
+			<td colspan=2 class = r12>
+				<h1>CrystalsCollector!</h1>
+			</td>
+		</tr>
+		<tr style="background-color:tan; height:40px; margin:0px; padding:0px; color:green;">
+			<td colspan=2 class=>
+				<br>You will be given a random number at the start of the game. <br><br> There are four (4) crystals below. 
+				By clicking on a crystal, you will add a specific amount of points to your total score. <br><br> You win 
+				the game by matching your total score to the random number; you lose the game if your number goes 
+				beyond the random number. <br><br> The value of each crystal is hidden from you until you click on it.
+				Each time the game starts, the game will change the value of each crystal.<br><br>
+			</td>
+		</tr>
+		<tr style="height:40px; margin:0px; padding:0px; color:black;">
+			<td style="background-color:teal; width:300px; color:purple">
+				<span id=> Number Goal: </span>
+			</td>
+			<td style="background-color:skyblue; width:800px;">
+				<span id=> Wins:  </span>
+				<br>
+				<span id=> Loses:  </span>
+			</td>
+		</tr>
+		<tr style="background-color:lightsteelblue; height:120px; margin:10px; padding:10px; color:black;">
+			<td class=> 
+			</td>
+			<td>
+				<span id=></span>
+				<img style="width:100px; height:80px;" id = crystal0 src = "crystal0.jpeg">
+				<img style="width:100px; height:80px;" id = crystal1 src = "crystal1.jpeg">
+				<img style="width:100px; height:80px;" id = crystal2 src = "crystal2.jpeg">
+				<img style="width:100px; height:80px;" id = crystal3 src = "crystal3.jpeg">
+			</td>
+			 
+		</tr>
+		<tr style="background-color:yellow; height:40px; margin:0px; padding:0px; color:orange;">
+			<td class = >Your total score:
+			</td>	
+			<td class = r4>
+				<span id=>TBD</span>
+			</td>
+		</tr>
+	</table>
+
+
+
+	<script type="text/javascript">
+
+//===================================================================================
+//		game$ :: holds functions for window.crystals
+//===================================================================================
+		function game$()
+		{
+			window.crystals = game$onClick.bind(this);
+
+			this.crystalNumberGenerator = game$crystalNumberGenerator;
+			this.goalNumber = game$goalNumber;
+			this.totalCrystalNumber = game$totalCrystalNumber;
+
+			this.winner = game$winner;
+			this.loser = game$loser;
+
+			this.refresh = game$refresh;
+			this.clear = game$clear;
+			
+			this.wins = 0;
+			this.losses = 0;
+
+			this.answer = '';
+
+			this.crystalNumbers = new [3,7,9,12];
+			//this.clear()
+		} 
+
+//===================================================================================
+//		$onClick :: get generated random generated numbers from clicking crystals
+//===================================================================================
+
+		function game$onClick(event) //
+		{
+			var onClickLocal, index,value;
+
+			element = event.target;
+			if (element.tagName != "IMG") return;
+			index = parseInt(element.id)
+			value = this.crystalNumbers[index];
+
+			guesses.innerText += onClickLocal;
+
+			if (onClickLocal == this.goalNumber) return this.winner();
+			this.loser();
+		}
+//===================================================================================
+//		$goalNumber :: generate random number between 19-120 to serve as 'goal number'
+//===================================================================================
+		function game$goalNumber() 
+		{	
+		    return Math.floor(Math.random()*(120-19+1)+19);
+		}
+//===================================================================================
+//		$crystalNumberGenerator :: generate random number between 1-12 for each crystal
+//===================================================================================
+		function game$crystalNumberGenerator(min,max) 
+		{
+			min = Math.ceil(1);
+			max = Math.floor(12);
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+//===================================================================================
+//		$totalCrystalNumber :: increment user guesses total from clicking crystals
+//===================================================================================
+		function game$totalCrystalNumber() 
+		{
+			var count = 0;
+      		var button = document.getElementById("countButton");
+      		var display = document.getElementById("displayCount");
+
+		    button.onclick = function(){
+		        count++;
+		        display.innerHTML = count;
+		    }
+		}
+//===================================================================================
+//		$winner ::
+//===================================================================================
+		function game$winner() 
+		{
+			this.wins +=1;
+			this.clear();
+			this.refresh();
+		}
+//===================================================================================
+//		$loser ::
+//===================================================================================
+		function game$loser()  
+		{ 
+			this.totalCrystalNumber();
+			if (this.goalNumber < this.totalCrystalNumber)
+				{
+					this.losses += 1;
+					this.game$refresh;
+					this.game$clear;
+				}	
+		}
+//===================================================================================
+//		$refresh ::
+//===================================================================================
+		function game$refresh()
+		{
+			loses.innerText = this.loses;
+			wins.innerText = this.wins;
+			return;
+		}
+//===================================================================================
+//		$clear ::
+//===================================================================================
+		function game$clear()
+		{
+			this.goalNumber;
+			this.totalNumber = 0;
+		}
+
+	</script>
+</body>
+</html>
